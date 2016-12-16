@@ -362,7 +362,7 @@ static void pmic_irq_enable(struct irq_data *data)
 		&(pmic->irq_mask[(data->irq - pmic->irq_base) / 32]));
 	pmic->irq_need_update = 1;
 
-	dev_dbg(pmic->dev, "[%s]: irq_mask = %x", __func__,
+	dev_dbg(pmic->dev, "[%s]: irq_mask = %lx", __func__,
 				pmic->irq_mask[(data->irq - pmic->irq_base)/32]);
 }
 
@@ -371,7 +371,7 @@ static void pmic_irq_disable(struct irq_data *data)
 	set_bit((data->irq - pmic->irq_base) % 32,
 		&(pmic->irq_mask[(data->irq - pmic->irq_base) / 32]));
 	pmic->irq_need_update = 1;
-	dev_dbg(pmic->dev, "[%s]: irq_mask = %x", __func__,
+	dev_dbg(pmic->dev, "[%s]: irq_mask = %lx", __func__,
 				pmic->irq_mask[(data->irq - pmic->irq_base)/32]);
 }
 
@@ -379,7 +379,7 @@ static void pmic_irq_sync_unlock(struct irq_data *data)
 {
 	struct intel_pmic_regmap *map;
 
-	dev_dbg(pmic->dev, "[%s]: irq_mask = %x", __func__,
+	dev_dbg(pmic->dev, "[%s]: irq_mask = %lx", __func__,
 				pmic->irq_mask[(data->irq - pmic->irq_base)/32]);
 	if (pmic->irq_need_update) {
 		map = &pmic->irq_regmap[(data->irq - pmic->irq_base)].mask;
@@ -606,7 +606,7 @@ struct file_operations all_fops = {
     .read = seq_read,
 };
 
-static void pmic_create_debugfs()
+static void pmic_create_debugfs(void)
 {
 	struct dentry *entry;
 

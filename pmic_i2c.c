@@ -19,10 +19,12 @@
 #include <linux/interrupt.h>
 #include <linux/workqueue.h>
 #include <linux/acpi.h>
-#include <linux/mfd/intel_mid_pmic.h>
+//#include <linux/mfd/intel_mid_pmic.h>
+#include "intel_mid_pmic.h"
 #include <linux/version.h>
 #include "./pmic.h"
-#include <linux/acpi_gpio.h>
+//#include <linux/acpi_gpio.h>
+#include <linux/of_gpio.h>
 
 static struct i2c_client *pmic_i2c_client;
 static struct intel_mid_pmic *pmic_i2c;
@@ -100,7 +102,7 @@ static int pmic_i2c_probe(struct i2c_client *i2c,
 	pmic_i2c->dev	= &i2c->dev;
 	pmic_i2c->irq	= i2c->irq;
 	pmic_i2c->default_client = i2c->addr;
-	pmic_i2c->pmic_int_gpio = acpi_get_gpio_by_index(pmic_i2c->dev, 0, NULL);
+	pmic_i2c->pmic_int_gpio = of_get_gpio(pmic_i2c->dev->of_node, 0);
 	pmic_i2c->readb	= pmic_i2c_readb;
 	pmic_i2c->writeb= pmic_i2c_writeb;
 	pmic_i2c->readmul = pmic_i2c_read_multi_byte;
