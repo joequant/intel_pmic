@@ -20,9 +20,11 @@
 #include <linux/irq.h>
 #include <linux/interrupt.h>
 #include <linux/workqueue.h>
-#include <linux/mfd/intel_mid_pmic.h>
+//#include <linux/mfd/intel_mid_pmic.h>
+#include "intel_mid_pmic.h"
 #include <linux/acpi.h>
-#include <asm/intel_vlv2.h>
+//#include <asm/intel_vlv2.h>
+#include "intel_vlv2.h"
 #include <linux/version.h>
 #include <linux/debugfs.h>
 #include <linux/seq_file.h>
