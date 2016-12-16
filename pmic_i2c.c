@@ -142,7 +142,7 @@ MODULE_DEVICE_TABLE(i2c, pmic_i2c_id);
 static struct acpi_device_id pmic_acpi_match[] = {
 	{ "TEST0001", (kernel_ulong_t)&crystal_cove_pmic},
 	{ "INT33FD", (kernel_ulong_t)&crystal_cove_pmic},
-	{ "INT33F4", (kernel_ulong_t)&dollar_cove_pmic},
+	/*	{ "INT33F4", (kernel_ulong_t)&dollar_cove_pmic}, */
 	{ "INT33F5", (kernel_ulong_t)&dollar_cove_ti_pmic},
 	{ "INT33FE", (kernel_ulong_t)&whiskey_cove_pmic},
 	{ },
