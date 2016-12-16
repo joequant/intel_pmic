@@ -20,16 +20,23 @@
 #include <linux/irq.h>
 #include <linux/interrupt.h>
 #include <linux/gpio.h>
-#include <linux/mfd/intel_mid_pmic.h>
+//#include <linux/mfd/intel_mid_pmic.h>
+#include "intel_mid_pmic.h"
 #include <linux/acpi.h>
-#include <asm/intel_vlv2.h>
-#include <linux/lnw_gpio.h>
+//#include <asm/intel_vlv2.h>
+#include "intel_vlv2.h"
+//#include <linux/lnw_gpio.h>
 #include <linux/version.h>
-#include <asm/dc_xpwr_pwrsrc.h>
-#include <linux/power/dc_xpwr_battery.h>
-#include <linux/power/dc_xpwr_charger.h>
-#include <linux/regulator/intel_dcovex_regulator.h>
-#include <asm/intel_em_config.h>
+//#include <asm/dc_xpwr_pwrsrc.h>
+#include "dc_xpwr_pwrsrc.h"
+//#include <linux/power/dc_xpwr_battery.h>
+#include "dc_xpwr_battery.h"
+//#include <linux/power/dc_xpwr_charger.h>
+#include "dc_xpwr_charger.h"
+//#include <linux/regulator/intel_dcovex_regulator.h>
+#include "intel_dcovex_regulator.h"
+//#include <asm/intel_em_config.h>
+#include "intel_em_config.h"
 #include "./pmic.h"
 
 enum {
@@ -304,6 +311,7 @@ struct intel_pmic_irqregmap dollar_cove_irqregmap[] = {
 	DOLLAR_COVE_IRQREGMAP(BC_USB_CHNG_IRQ),
 };
 
+#define CONFIG_POWER_SUPPLY_CHARGER 
 
 #ifdef CONFIG_POWER_SUPPLY_CHARGER
 #define DC_CHRG_CHRG_CUR_NOLIMIT	1800
@@ -379,7 +387,7 @@ static void dc_xpwr_chrg_pdata(void)
 		pr_err("unable to request GPIO pin\n");
 		pdata.otg_gpio = -1;
 	} else {
-		lnw_gpio_set_alt(pdata.otg_gpio, 0);
+	  //		lnw_gpio_set_alt(pdata.otg_gpio, 0);
 	}
 
 	platform_init_chrg_params(&pdata);

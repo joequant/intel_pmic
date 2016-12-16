@@ -20,18 +20,23 @@
 #include <linux/i2c.h>
 #include <linux/irq.h>
 #include <linux/interrupt.h>
-#include <linux/mfd/intel_mid_pmic.h>
+//#include <linux/mfd/intel_mid_pmic.h>
+#include "intel_mid_pmic.h"
 #include <linux/acpi.h>
-#include <asm/intel_vlv2.h>
+//#include <asm/intel_vlv2.h>
+#include "intel_vlv2.h"
 #include <linux/version.h>
 #include "./pmic.h"
-#include <linux/regulator/intel_whiskey_cove_pmic.h>
+//#include <linux/regulator/intel_whiskey_cove_pmic.h>
+#include "intel_whiskey_cove_pmic.h"
 
-#include <asm/intel_basincove_gpadc.h>
+//#include <asm/intel_basincove_gpadc.h>
+#include "intel_basincove_gpadc.h"
 #include <linux/iio/iio.h>
 #include <linux/iio/machine.h>
 #include <linux/iio/types.h>
 
+#define GPADC_NUM_CHANNELS 12
 #define WHISKEY_COVE_IRQ_NUM	17
 
 #define CHIPID		0x00
