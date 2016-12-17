@@ -36,7 +36,6 @@
 #include <linux/iio/machine.h>
 #include <linux/iio/types.h>
 
-#define GPADC_NUM_CHANNELS 12
 #define WHISKEY_COVE_IRQ_NUM	17
 
 #define CHIPID		0x00

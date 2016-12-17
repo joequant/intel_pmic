@@ -92,17 +92,32 @@ static const struct dev_pm_ops pmic_pm_ops = {
 				pmic_resume)
 };
 
+static int pmic_i2c_lookup_gpio(struct device *dev, int acpi_index)
+{
+  struct gpio_desc *desc;
+  int gpio;
+  desc = gpiod_get_index(dev, KBUILD_MODNAME, acpi_index, GPIOD_ASIS);
+  if (IS_ERR(desc))
+    return PTR_ERR(desc);
+  gpio = desc_to_gpio(desc);
+  gpiod_put(desc);
+  return gpio;
+}
+
 static int pmic_i2c_probe(struct i2c_client *i2c,
 			    const struct i2c_device_id *id)
 {
-	if (pmic_i2c_client != NULL || pmic_i2c != NULL)
+	if (pmic_i2c_client != NULL)
 		return -EBUSY;
-	pmic_i2c 	= (struct intel_mid_pmic *)id->driver_data;
+
+	if (!id)
+         	return -ENODEV;
+	pmic_i2c 	=  (struct intel_mid_pmic *)id->driver_data;
 	pmic_i2c_client	= i2c;
 	pmic_i2c->dev	= &i2c->dev;
 	pmic_i2c->irq	= i2c->irq;
 	pmic_i2c->default_client = i2c->addr;
-	pmic_i2c->pmic_int_gpio = of_get_gpio(pmic_i2c->dev->of_node, 0);
+	pmic_i2c->pmic_int_gpio = pmic_i2c_lookup_gpio(pmic_i2c->dev, 0);
 	pmic_i2c->readb	= pmic_i2c_readb;
 	pmic_i2c->writeb= pmic_i2c_writeb;
 	pmic_i2c->readmul = pmic_i2c_read_multi_byte;
@@ -120,30 +135,30 @@ static int pmic_i2c_remove(struct i2c_client *i2c)
 }
 
 static const struct i2c_device_id pmic_i2c_id[] = {
+  /*
 	{ "crystal_cove", (kernel_ulong_t)&crystal_cove_pmic},
 	{ "TEST0001", (kernel_ulong_t)&crystal_cove_pmic},
 	{ "TEST0001:00", (kernel_ulong_t)&crystal_cove_pmic},
 	{ "INT33FD", (kernel_ulong_t)&crystal_cove_pmic},
 	{ "INT33FD:00", (kernel_ulong_t)&crystal_cove_pmic},
-	/*
 	{ "INT33F4", (kernel_ulong_t)&dollar_cove_pmic},
 	{ "INT33F4:00", (kernel_ulong_t)&dollar_cove_pmic},
 	{ "dollar_cove", (kernel_ulong_t)&dollar_cove_pmic},
-	*/
 	{ "INT33F5", (kernel_ulong_t)&dollar_cove_ti_pmic},
-	{ "INT33F5:00", (kernel_ulong_t)&dollar_cove_ti_pmic},
+	{ "INT33F5:00", (kernel_ulong_t)&dollar_cove_ti_pmic}, */
 	{ "whiskey_cove", (kernel_ulong_t)&whiskey_cove_pmic},
 	{ "INT33FE", (kernel_ulong_t)&whiskey_cove_pmic},
 	{ "INT33FE:00", (kernel_ulong_t)&whiskey_cove_pmic},
+	{ "INT33FE:01", (kernel_ulong_t)&whiskey_cove_pmic},
 	{ }
 };
 MODULE_DEVICE_TABLE(i2c, pmic_i2c_id);
 
 static struct acpi_device_id pmic_acpi_match[] = {
-	{ "TEST0001", (kernel_ulong_t)&crystal_cove_pmic},
+  /*	{ "TEST0001", (kernel_ulong_t)&crystal_cove_pmic},
 	{ "INT33FD", (kernel_ulong_t)&crystal_cove_pmic},
-	/*	{ "INT33F4", (kernel_ulong_t)&dollar_cove_pmic}, */
-	{ "INT33F5", (kernel_ulong_t)&dollar_cove_ti_pmic},
+	{ "INT33F4", (kernel_ulong_t)&dollar_cove_pmic}, 
+	{ "INT33F5", (kernel_ulong_t)&dollar_cove_ti_pmic}, */
 	{ "INT33FE", (kernel_ulong_t)&whiskey_cove_pmic},
 	{ },
 };
@@ -161,24 +176,7 @@ static struct i2c_driver pmic_i2c_driver = {
 	.id_table = pmic_i2c_id,
 	.shutdown = pmic_shutdown,
 };
-
-static int __init pmic_i2c_init(void)
-{
-	int ret;
-
-	ret = i2c_add_driver(&pmic_i2c_driver);
-	if (ret != 0)
-		pr_err("Failed to register pmic I2C driver: %d\n", ret);
-
-	return ret;
-}
-subsys_initcall(pmic_i2c_init);
-
-static void __exit pmic_i2c_exit(void)
-{
-	i2c_del_driver(&pmic_i2c_driver);
-}
-module_exit(pmic_i2c_exit);
+module_i2c_driver(pmic_i2c_driver);
 
 MODULE_DESCRIPTION("PMIC I2C support for INTEL PMIC");
 MODULE_LICENSE("GPL");
